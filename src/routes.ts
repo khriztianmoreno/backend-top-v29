@@ -4,13 +4,11 @@
 import { Application } from 'express';
 
 import healthcheckRouter from './api/healthcheck';
+import userRouter from './api/user';
 
 function routes(app: Application) {
   app.use('/api/healthcheck', healthcheckRouter);
-
-  // users
-  // app.use('/api/users', userRouter);
-  // app.use('/api/payments', paymentRouter);
+  app.use('/api/users', userRouter);
 }
 
 export default routes;

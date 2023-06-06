@@ -1,9 +1,9 @@
-import express, { Express, Request, Response, NextFunction } from 'express';
+import express from 'express';
 
 import configExpress from './config/express';
 import routes from './routes';
 
-const app: Express = express();
+const app = express();
 
 const PORT = process.env.PORT ?? 8080;
 
