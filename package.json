@@ -1,0 +1,49 @@
+{
+  "name": "backend-top-v29",
+  "version": "1.0.0",
+  "description": "api to frontend_top_v29 project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.15.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.5",
+    "@commitlint/config-conventional": "^17.6.5",
+    "@typescript-eslint/eslint-plugin": "^5.59.9",
+    "eslint": "^8.42.0",
+    "eslint-config-standard-with-typescript": "^35.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "husky": "^8.0.3",
+    "typescript": "^5.1.3"
+  },
+  "keywords": [
+    "api",
+    "node.js",
+    "typescript",
+    "express.js",
+    "prisma.io"
+  ],
+  "author": "cristian moreno <khriztianmoreno@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/khriztianmoreno/backend-top-v29.git"
+  },
+  "bugs": {
+    "url": "https://github.com/khriztianmoreno/backend-top-v29/issues"
+  },
+  "homepage": "https://github.com/khriztianmoreno/backend-top-v29#readme",
+  "volta": {
+    "node": "18.15.0",
+    "npm": "9.5.1"
+  }
+}
