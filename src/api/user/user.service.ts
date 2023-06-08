@@ -41,6 +41,24 @@ export async function getUserById(id: string) {
 
 export async function getUserByEmail(email: string) {
   const user = await prisma.user.findUnique({
+    select: {
+      id: true,
+      email: true,
+      password: true,
+      firstName: true,
+      lastName: true,
+      avatar: true,
+      roles: {
+        select: {
+          role: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
     where: {
       email,
     },
