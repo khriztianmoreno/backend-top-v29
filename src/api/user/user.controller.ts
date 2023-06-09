@@ -9,8 +9,6 @@ import {
   updateUser,
 } from './user.service';
 
-import { comparePassword } from '../../auth/utils/bcrypt';
-
 export async function getAllUserHandler(req: Request, res: Response) {
   const users = await getAllUser();
 
@@ -20,9 +18,13 @@ export async function getAllUserHandler(req: Request, res: Response) {
 export async function createUserHandler(req: Request, res: Response) {
   const data = req.body;
 
-  const user = await createUser(data);
+  try {
+    const user = await createUser(data);
 
-  return res.json(user);
+    return res.json(user);
+  } catch (error: any) {
+    console.log(error);
+  }
 }
 
 export async function getUserHandler(req: Request, res: Response) {
