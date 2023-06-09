@@ -7,12 +7,12 @@ import {
   getUserHandler,
   updateUserHandler,
 } from './user.controller';
-import { isAuthenticated } from '../../auth/auth.service';
+import { isAuthenticated, hasRole } from '../../auth/auth.controller';
 
 const router = Router();
 
 // /api/users -> GET
-router.get('/', getAllUserHandler);
+router.get('/', hasRole(['ADMIN']), getAllUserHandler);
 
 // /api/users -> POST
 router.post('/', createUserHandler);
