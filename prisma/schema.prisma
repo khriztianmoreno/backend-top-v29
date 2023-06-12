@@ -11,18 +11,22 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  firstName String
-  lastName  String
-  password  String
-  isActive  Boolean  @default(false)
-  avatar    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                   String    @id @default(cuid())
+  email                String    @unique
+  firstName            String
+  lastName             String
+  password             String
+  isActive             Boolean   @default(false)
+  avatar               String?
+  passwordResetToken   String?
+  passwordResetExpires DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 
   // relations
-  roles UserRole[]
+  roles      UserRole[]
+  Applicants Applicants[]
+  Payment    Payment[]
 }
 
 model Role {
@@ -43,4 +47,82 @@ model UserRole {
   userId String
   role   Role   @relation(fields: [roleId], references: [id])
   roleId String
+}
+
+model Company {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // relations
+  jobs Job[]
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+  VOLUNTEER
+}
+
+enum ExperienceLevel {
+  ENTRY_LEVEL
+  MID_LEVEL
+  SENIOR_LEVEL
+  DIRECTOR
+  EXECUTIVE
+}
+
+model Job {
+  id               String          @id @default(cuid())
+  title            String
+  about            String
+  summary          String
+  type             JobType
+  location         String?
+  imageLogo        String
+  experience       ExperienceLevel
+  salary           Int
+  responsibilities String[]
+  qualifications   String[]
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  // relations
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String
+
+  Applicants Applicants[]
+}
+
+model Applicants {
+  id        String   @id @default(cuid())
+  phone     String
+  resume    String
+  cover     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relations
+  job    Job    @relation(fields: [jobId], references: [id])
+  jobId  String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model Payment {
+  id          String   @id @default(cuid())
+  description String?
+  currency    String
+  amount      Int
+  refId       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // relations
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 }
