@@ -3,12 +3,18 @@
  */
 import { Application } from 'express';
 
-import healthcheckRouter from './api/healthcheck';
-import userRouter from './api/user';
 import authLocalRouter from './auth/local';
+import companyRouter from './api/company';
+import healthcheckRouter from './api/healthcheck';
+import jobRouter from './api/job';
+import paymentRouter from './api/payment';
+import userRouter from './api/user';
 
 function routes(app: Application) {
+  app.use('/api/companies', companyRouter);
   app.use('/api/healthcheck', healthcheckRouter);
+  app.use('/api/jobs', jobRouter);
+  app.use('/api/payments', paymentRouter);
   app.use('/api/users', userRouter);
 
   // Auth
