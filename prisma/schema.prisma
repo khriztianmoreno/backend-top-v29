@@ -11,18 +11,22 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  firstName String
-  lastName  String
-  password  String
-  isActive  Boolean  @default(false)
-  avatar    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                   String    @id @default(cuid())
+  email                String    @unique
+  firstName            String
+  lastName             String
+  password             String
+  isActive             Boolean   @default(false)
+  avatar               String?
+  passwordResetToken   String?
+  passwordResetExpires DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 
   // relations
-  roles UserRole[]
+  roles      UserRole[]
+  Applicants Applicants[]
+  Payment    Payment[]
 }
 
 model Role {
@@ -90,4 +94,35 @@ model Job {
   // relations
   company   Company @relation(fields: [companyId], references: [id])
   companyId String
+
+  Applicants Applicants[]
+}
+
+model Applicants {
+  id        String   @id @default(cuid())
+  phone     String
+  resume    String
+  cover     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relations
+  job    Job    @relation(fields: [jobId], references: [id])
+  jobId  String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model Payment {
+  id          String   @id @default(cuid())
+  description String?
+  currency    String
+  amount      Int
+  refId       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // relations
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 }
