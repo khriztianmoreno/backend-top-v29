@@ -1,8 +1,12 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 
-import { getUserByEmail } from '../../api/user/user.service';
+import {
+  getUserByEmail,
+  getUserByToken,
+  updateUser,
+} from '../../api/user/user.service';
+import { createAuthResponse } from './local.service';
 import { comparePassword } from '../utils/bcrypt';
-import { signToken } from '../auth.service';
 
 export async function loginHandler(req: Request, res: Response) {
   const { email, password } = req.body;
@@ -21,22 +25,43 @@ export async function loginHandler(req: Request, res: Response) {
       return res.status(400).json({ message: 'Email or password not match' });
     }
 
-    // jwt
-    const payload = {
-      id: user.id,
-      email: user.email,
-    };
-    const token = signToken(payload);
+    const response = createAuthResponse(user);
 
-    const profile = {
-      fullName: `${user.firstName} ${user.lastName}`,
-      avatar: user.avatar,
-      roles: user.roles.map(({ role }) => ({
-        id: role.id,
-        name: role.name,
-      })),
+    return res.json(response);
+  } catch (error) {}
+}
+
+export async function activateHandler(req: Request, res: Response) {
+  const { token } = req.params;
+
+  try {
+    const user = await getUserByToken(token);
+
+    if (!user) {
+      return res.status(404).json({
+        message: 'Invalid token',
+      });
+    }
+
+    if (user.passwordResetExpires) {
+      if (Date.now() > user.passwordResetExpires.getTime()) {
+        return res.status(400).json({
+          message: 'Token expired',
+        });
+      }
+    }
+
+    const data = {
+      ...user,
+      isActive: true,
+      passwordResetToken: null,
+      passwordResetExpires: null,
     };
 
-    return res.json({ token, profile });
+    await updateUser(data);
+
+    const response = createAuthResponse(user);
+
+    return res.json(response);
   } catch (error) {}
 }
