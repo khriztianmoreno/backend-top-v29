@@ -8,6 +8,7 @@ import {
   getUserById,
   updateUser,
 } from './user.service';
+import { sendMailSendGrid } from '../../utils/email';
 
 export async function getAllUserHandler(req: Request, res: Response) {
   const users = await getAllUser();
@@ -21,7 +22,21 @@ export async function createUserHandler(req: Request, res: Response) {
   try {
     const user = await createUser(data);
 
-    return res.json(user);
+    // Send email
+    const emailData = {
+      from: 'No reply <cristian.moreno@makeitreal.camp>',
+      to: user.email,
+      subject: 'Welcome to the app',
+      templateId: 'd-649011f35b854690a0e5f47de11eb2f2',
+      dynamicTemplateData: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        url: `${process.env.FRONTEND_URL}/verify-account/${user.passwordResetToken}`,
+      },
+    };
+    sendMailSendGrid(emailData);
+
+    return res.status(201).json(user);
   } catch (error: any) {
     console.log(error);
   }
